@@ -16,7 +16,7 @@ template<class A,bool own=true> struct box{
 	constexpr box<A> move(){return box<A>(*this);}
 	constexpr box<A> copy() const{return box<A>(std::cref(*a));}
 	constexpr A& operator*(){return *a;}
-	constexpr A* operator->(){return a;}
+	//constexpr A* operator->(){return a;}
 	protected: 
 		A *a;
 };
@@ -30,7 +30,7 @@ template<class A> struct box<A,false>{
 	box<A,false> constexpr borrow()const{return box<A,false>(*a);}
 	box<A> constexpr copy()const{return box<A>(std::cref(*a));}
 	A& operator*(){return *a;}
-	A* operator->(){return a;}
+	//A* operator->(){return a;}
 	protected: 
 		A *a;
 };
