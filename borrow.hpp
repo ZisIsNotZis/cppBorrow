@@ -9,7 +9,7 @@ template<class A,bool own=true> struct box{
 	constexpr box(A&& b):box(b){}
 	constexpr box(A *b):a(b){}
 	constexpr box(const box<A>& b):a(new A(b.a)){}
-	constexpr box(box<A>& b):a(b.a){b.a=0;}
+	constexpr box(box<A>& b):a(b.a){b.a=nullptr;}
 	constexpr box(box<A>&& b):box(b.a){}
 	~box(){delete a;}
 	constexpr box<A,false> borrow() const{return box<A,false>(*a);}
