@@ -4,11 +4,9 @@ Compile-time C++ borrowing mechanism like what's in Rust: Resources will be `bor
 # Usage
 
 ```
-#include "borrow.hpp"
-
-int main(){
-	
-	resource _a;	
+int main()
+{
+	resource _a;
 
 	box<resource> a(_a);// To `borrow`, `move`, or `copy`, resource have to be wrapped like this.
 						// Here, `a` seals resource from `_a`, which means generally `_a` can no longer be used anymore.
@@ -19,12 +17,12 @@ int main(){
 	*a;					// Access wrapped data using `operator*`
 
 	{
-		auto b=a.borrow()// `b` borrows resource from `a`. It shares resource with `a` but don't free that.
-		*a.xxx()		// `a` is still able to access `b`
+		auto b=a.borrow();// `b` borrows resource from `a`. It shares resource with `a` but don't free that.
+		( *a ).TestMethod();		// `a` is still able to access `b`
 	}
 
 	{
-		auto b=a.move()	// `b` steals resource from `a`. If `a` borrowed resource from somebody else, a compiling
+		auto b=a.move();	// `b` steals resource from `a`. If `a` borrowed resource from somebody else, a compiling
 						// error will be given since `a` do not own the resource. Accessing `a` after this will throw
 						// a runtime error. (There's no way to make this a compile time error since, this is C++)
 						// Also, accessing empty-initialized box will also throw a runtime error. At least everything is
@@ -32,6 +30,8 @@ int main(){
 	}
 
 	{	
-		auto b=a.copy()	// `b` owns a duplicate of resource inside `a`. They don't share the same memory space anymore.
+		auto b=a.copy();	// `b` owns a duplicate of resource inside `a`. They don't share the same memory space anymore.
 	}
+    return 0;
+}
 ```
