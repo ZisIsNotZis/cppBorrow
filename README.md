@@ -3,7 +3,7 @@ Compile-time C++ borrowing mechanism like what's in Rust: Resources will be `bor
 
 # Usage
 
-```
+```C++
 int main()
 {
 	resource _a;
