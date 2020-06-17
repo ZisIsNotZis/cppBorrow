@@ -18,7 +18,7 @@ int main()
 
 	{
 		auto b=a.borrow();// `b` borrows resource from `a`. It shares resource with `a` but don't free that.
-		( *a ).TestMethod();		// `a` is still able to access `b`
+		( *a ).xxx();		// `a` is still able to access `b`
 	}
 
 	{
