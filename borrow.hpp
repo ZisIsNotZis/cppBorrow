@@ -3,31 +3,35 @@
 #include<utility>
 #include<functional>
 template<class A,bool own=true> struct box{
-	box(){}
-	box(const A& b):a(new A(b)){}
-	box(A& b):a(new A(std::move(b))){}
-	box(A&& b):box(b){}
-	box(A *b):a(b){}
-	box(const box<A>& b):a(new A(b.a)){}
-	box(box<A>& b):a(b.a){b.a=0;}
-	box(box<A>&& b):box(b.a){}
+	constexpr box(){}
+	constexpr box(const A& b):a(new A(b)){}
+	constexpr box(A& b):a(new A(std::move(b))){}
+	constexpr box(A&& b):box(b){}
+	constexpr box(A *b):a(b){}
+	constexpr box(const box<A>& b):a(new A(b.a)){}
+	constexpr box(box<A>& b):a(b.a){b.a=nullptr;}
+	constexpr box(box<A>&& b):box(b.a){}
 	~box(){delete a;}
-	box<A,false> borrow() const{return box<A,false>(*a);}
-	box<A> move(){return box<A>(*this);}
-	box<A> copy() const{return box<A>(std::cref(*a));}
-	A& operator*(){return *a;}
-	A *a;
+	constexpr box<A,false> borrow() const{return box<A,false>(*a);}
+	constexpr box<A> move(){return box<A>(*this);}
+	constexpr box<A> copy() const{return box<A>(std::cref(*a));}
+	constexpr A& operator*(){return *a;}
+	constexpr A* operator->(){return a;}
+	protected: 
+		A *a;
 };
 template<class A> struct box<A,false>{
-	box(){}
-	box(A& b):a(&b){}
-	box(A&& b):box(b){}
-	box(A *b):a(b){}
-	template<bool B> box(box<A,B>& b):a(b.a){}
-	template<bool B> box(box<A,B>&& b):box(b){}
-	box<A,false> borrow()const{return box<A,false>(*a);}
-	box<A> copy()const{return box<A>(std::cref(*a));}
+	constexpr box(){}
+	constexpr box(A& b):a(&b){}
+	constexpr box(A&& b):box(b){}
+	constexpr box(A *b):a(b){}
+	template<bool B> constexpr box(box<A,B>& b):a(b.a){}
+	template<bool B> constexpr box(box<A,B>&& b):box(b){}
+	box<A,false> constexpr borrow()const{return box<A,false>(*a);}
+	box<A> constexpr copy()const{return box<A>(std::cref(*a));}
 	A& operator*(){return *a;}
-	A *a;
+	//A* operator->(){return a;}
+	protected: 
+		A *a;
 };
 #endif

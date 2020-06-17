@@ -1,12 +1,20 @@
-# C++ Borrowing Class
-Compile-time C++ borrowing mechanism like what's in Rust: Resources will be `borrow`ed, `move`ed, or `copy`ed instead of ambiguously "passed" everywhere. The mechanism will decide when to free resources. People might not like this since either `borrow`, `move` or `copy` have to be specified for any "passing". But this do makes sure everything will be "safe" at runtime.
+#include "borrow.hpp"
+#include <iostream>
+struct resource
+{
+    int value;
+    resource( int value_ ) : value( value_ ) {}
+    void TestMethod() {
+        std::cout << "The value is " << value << "\n";
+    }
+};
 
-# Usage
-
-```C++
 int main()
 {
-	resource _a;
+	std::cout << "Please enter a test value!\n";
+    int value;
+    std::cin >> value;
+	resource _a( value );	
 
 	box<resource> a(_a);// To `borrow`, `move`, or `copy`, resource have to be wrapped like this.
 						// Here, `a` seals resource from `_a`, which means generally `_a` can no longer be used anymore.
@@ -18,7 +26,7 @@ int main()
 
 	{
 		auto b=a.borrow();// `b` borrows resource from `a`. It shares resource with `a` but don't free that.
-		( *a ).xxx();		// `a` is still able to access `b`
+		( *a ).TestMethod();		// `a` is still able to access `b`
 	}
 
 	{
@@ -34,4 +42,3 @@ int main()
 	}
     return 0;
 }
-```
